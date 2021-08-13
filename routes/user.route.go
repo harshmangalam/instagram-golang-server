@@ -11,7 +11,6 @@ func InitUserRoute(route fiber.Router) {
 
 	user := route.Group("/user")
 
-	user.Get("/", controllers.FetchUsers)
 	user.Get("/suggestions", middlewares.Protected(), controllers.FetchUserSuggestion)
 	user.Get("/:userId", controllers.FetchUserById)
 	user.Get("/username/:username", controllers.FetchUserByUsername)

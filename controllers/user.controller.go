@@ -11,42 +11,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func FetchUsers(c *fiber.Ctx) error {
-
-	client := database.Client
-	ctx := context.Background()
-
-	userId, err := c.ParamsInt("userId")
-
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"status":  "error",
-			"message": "can`t fetch user suggestions",
-			"data":    err.Error(),
-		})
-	}
-
-	users, err := client.User.Query().Where(user.IDNEQ(userId)).WithFollowers(func(uq *ent.UserQuery) {
-		uq.Select(user.FieldID)
-	}).WithFollowings(func(uq *ent.UserQuery) {
-		uq.Select(user.FieldID)
-	}).All(ctx)
-
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"status":  "error",
-			"message": "can`t fetch users",
-			"data":    err.Error(),
-		})
-	}
-
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"status":  "success",
-		"message": "Fetch users",
-		"data":    users,
-	})
-}
-
 func FetchUserById(c *fiber.Ctx) error {
 
 	client := database.Client
